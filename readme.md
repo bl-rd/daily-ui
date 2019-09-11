@@ -21,3 +21,5 @@ To create a new project run:
 ```bash
 $ npm run scaffold -- <number>
 ```
+
+**Make sure to build any sub-projects before committing!** This will be fixed later 
