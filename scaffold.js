@@ -29,6 +29,10 @@ async function go(filename, scaffoldDirectory = 'scaffold') {
         logError('Directory already exists - choose a new directory name');
         process.exit();
     }
+
+    logInformation('Updating directory index');
+
+    await updateDirectory(filename, slugged);
     
     logInformation('Attempting to copy files...');
 
@@ -59,6 +63,27 @@ async function go(filename, scaffoldDirectory = 'scaffold') {
     logSuccess('Successfully updated index.html file');
 
     console.log('\n🚀', ' Good to go! Go to', directory, 'and run `pnpm` to install dependencies');
+}
+
+async function updateDirectory(name, directoryName) {
+    try {
+        const directoryLocation = './directory.json';
+        const directory = await fs.readJSON(directoryLocation);
+        const entry = {
+            name,
+            location: `pens/${directoryName}`,
+            created: new Date().toISOString(),
+            tags: [],
+            description: ''
+        };
+        if (directory.pens.find(x => x.location === entry.location)) {
+            throw Error("Entry already exists!!");
+        }
+        directory.pens.push(entry);
+        await fs.writeJSON(directoryLocation, directory, { spaces: 2 });
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 /**
