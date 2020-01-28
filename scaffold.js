@@ -56,7 +56,7 @@ async function go(index, scaffoldDirectory = 'scaffold') {
     // don't actually do anything yet!
     logSuccess('Successfully updated index.html file');
 
-    console.log('\n🚀', ' Good to go! Go to', directory, 'and run `yarn` to install dependencies');
+    console.log('\n🚀', ' Good to go! Go to', directory, 'and run `pnpm` to install dependencies');
 }
 
 /**
