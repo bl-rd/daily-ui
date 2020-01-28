@@ -1,30 +1,32 @@
 import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import slugify from 'slugify';
 
 console.log('');
 
-const number = parseInt(process.argv[2], 10);
+const filename = process.argv[2];
 
-go(number);
+go(filename);
 
 /**
  * 
- * @param {Number} index 
+ * @param {String} filename
  * @param {String} [scaffoldDirectory = 'scaffold']
  */
-async function go(index, scaffoldDirectory = 'scaffold') {    
+async function go(filename, scaffoldDirectory = 'scaffold') {    
 
-    if (isNaN(number)) {
-        logError('Please pass a valid number');
-        process.exit();
+    if (!filename) {
+        throw Error('must have a filename as the first argument!');
     }
 
-    const directory = path.resolve(path.resolve(), number.toString());
+    const slugged = slugify(filename).toLowerCase();
+
+    const directory = path.resolve(path.resolve(), 'pens', slugged);
     const alreadyExists = await directoryExists(directory);
 
     if (alreadyExists) {
-        logError('Directory already exists - choose a new number');
+        logError('Directory already exists - choose a new directory name');
         process.exit();
     }
     
@@ -43,7 +45,7 @@ async function go(index, scaffoldDirectory = 'scaffold') {
 
     try {
         const packageJson = await fs.readJSON(`${directory}/package.json`);    
-        packageJson.name += `-${number}`;
+        packageJson.name += `-${slugged}`;
         await fs.writeJSON(`${directory}/package.json`, packageJson, { spaces: 2 });
         logSuccess('Successfully updated package.json');
     } catch (e) {

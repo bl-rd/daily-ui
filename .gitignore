@@ -1,3 +1,4 @@
 node_modules/
 scaffold/pnpm-lock.yaml
 scaffold/package-lock.json
+pens/**/package-lock.json

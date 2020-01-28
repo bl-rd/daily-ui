@@ -11,6 +11,7 @@ devDependencies:
   rollup-plugin-babel: 4.3.3_@babel+core@7.8.3+rollup@1.30.1
   rollup-plugin-postcss: 2.0.5
   rollup-plugin-serve: 1.0.1
+  slugify: 1.3.6
 lockfileVersion: 5.1
 packages:
   /@babel/code-frame/7.8.3:
@@ -2642,6 +2643,12 @@ packages:
     dev: true
     resolution:
       integrity: sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
+  /slugify/1.3.6:
+    dev: true
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-wA9XS475ZmGNlEnYYLPReSfuz/c3VQsEMoU43mi6OnKMCdbnFXd4/Yg7J0lBv8jkPolacMpOrWEaoYxuE1+hoQ==
   /source-map/0.5.7:
     engines:
       node: '>=0.10.0'
@@ -2834,3 +2841,4 @@ specifiers:
   rollup-plugin-babel: ^4.3.3
   rollup-plugin-postcss: ^2.0.3
   rollup-plugin-serve: ^1.0.1
+  slugify: ^1.3.6
