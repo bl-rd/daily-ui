@@ -1,25 +1,13 @@
-# Daily UI
+# Pens
 
 TODO: write some information about this project
 
-## Run
+## What??
 
-To run a project, go to the project directory run:
-
-```bash
-$ npm start
-```
-
-To just build the files run:
-
-```bash
-$ npm run build
-```
-
-To create a new project run:
-
-```bash
-$ npm run scaffold -- <number>
-```
-
-**Make sure to build any sub-projects before committing!** This will be fixed later 
+- Create a Rust app that includes all the scaffolding files in a directory of choosing (similar to Hugo)
+  - Allow some presets? Similar to taxonomies??
+- Have some sort of config file that can build an index page of all the files
+- Include a dev server?
+- Have a command to build all the files so when running the app the projects can be viewed
+- Link to source files
+- Post to Codepen?? [API](https://blog.codepen.io/documentation/api/prefill/)
