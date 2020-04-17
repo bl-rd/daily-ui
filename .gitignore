@@ -2,3 +2,7 @@ node_modules/
 scaffold/pnpm-lock.yaml
 scaffold/package-lock.json
 pens/**/package-lock.json
+
+#Added by cargo
+
+/target
