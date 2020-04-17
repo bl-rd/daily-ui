@@ -1,0 +1,19 @@
+[
+  {
+    "name": "daily-ui",
+    "pens": [
+      {
+        "path": "a/path/goes/here",
+        "text": "some friendly text"
+      }
+    ]
+  }, {
+    "name": "labs",
+    "pens": [
+      {
+        "path": "some/other/path",
+        "text": "blah"
+      }
+    ]
+  }
+]
