@@ -4,7 +4,8 @@
     "pens": [
       {
         "path": "a/path/goes/here",
-        "text": "some friendly text"
+        "text": "some friendly text",
+        "timestamp": 1587381020
       }
     ]
   }, {
@@ -12,7 +13,8 @@
     "pens": [
       {
         "path": "some/other/path",
-        "text": "blah"
+        "text": "blah",
+        "timestamp": 1587381040
       }
     ]
   }

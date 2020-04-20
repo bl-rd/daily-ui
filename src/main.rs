@@ -1,9 +1,11 @@
 use serde::{Deserialize, Serialize};
+use std::fs::{read_to_string};
+use std::time::{SystemTime, UNIX_EPOCH};
 
-use std::error::Error;
-use std::fs::File;
-use std::io::BufReader;
-use std::path::Path;
+// use std::error::Error;
+// use std::fs::File;
+// use std::io::BufReader;
+// use std::path::Path;
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Project {
@@ -14,26 +16,50 @@ struct Project {
 #[derive(Deserialize, Serialize, Debug)]
 struct Pen {
     path: String,
-    text: String
-}
-
-fn read_pen_config(path: String){
-    let config = std::fs::read_to_string(path).unwrap();
-    let p: Vec<Project> = serde_json::from_str(config.as_str()).unwrap();
-
-    // let mut keys: Vec<String> = Vec::new();
-
-    // for project in p {
-    //     keys.push(project.name);
-    // }
-
-    let x = serde_json::to_string(&p).unwrap();
-
-    println!("{}", x);
+    text: String,
+    timestamp: u64
 }
 
 fn main() {
-    read_pen_config("config.json".to_owned());
+    let config_data = get_config_data("config.json".to_owned()).unwrap();
+
+    let mut project = get_project_from_config(config_data, "daily-ui".to_owned());
+
+    let pen: Pen = Pen {
+        path: String::from("some/other/amazing-path"),
+        text: String::from("Why hello!"),
+        timestamp: get_timestamp()
+    };
+
+    project.pens.push(pen);
+
+    println!("{:?}", project);
+}
+
+// Get the deserialised config file
+fn get_config_data(path: String) -> Result<Vec::<Project>, serde_json::error::Error> {
+
+    let config = read_to_string(path).unwrap();
+
+    let projects: Vec<Project> = serde_json::from_str(config.as_str())?;
+
+    Ok(projects)
+}
+
+// extract an individual project
+fn get_project_from_config(config: Vec<Project>, project_name: String) -> Project {
+    let proj = config
+        .into_iter()
+        .find(|p| p.name == project_name.as_str());
+    
+    match proj {
+        Some(p) => p,
+        None => panic!(format!("No project with the name \"{}\" exists!", project_name))
+    }
+}
+
+fn get_timestamp() -> u64 {
+    SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
 }
 
 // ---------------------------------------------------------

@@ -27,4 +27,5 @@ TODO: write some information about this project
 - cli command that adds to the config file
 
 - parse the config file into structured data
-- add the new entry
+- add the new entry (with unix timestamp)
+- serialize into JSON and write back
