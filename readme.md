@@ -29,3 +29,13 @@ TODO: write some information about this project
 - parse the config file into structured data
 - add the new entry (with unix timestamp)
 - serialize into JSON and write back
+
+## Scaffold a new project
+
+`cargo run <type> <path> <friendly name>`
+
+e.g.
+
+```bash
+cargo run rust labs/rss-reader "In browser RSS reader"
+```

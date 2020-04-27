@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use std::env;
+
 use std::fs::{read_to_string, write};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -20,24 +22,31 @@ struct Pen {
     timestamp: u64
 }
 
+#[derive(Debug)]
+struct ProjectType {
+    parent: String,
+    flavour: String,
+    path: String,
+    name: String
+}
+
 fn main() {
+
+    let args = get_args();
+
     let mut config_data = get_config_data("config.json".to_owned()).unwrap();
 
-//     let mut project = get_project_from_config(config_data, "daily-ui".to_owned());
-
     let pen: Pen = Pen {
-        path: String::from("some/other/amazing-path"),
-        text: String::from("Why hello!"),
+        path: args.path,
+        text: args.name,
         timestamp: get_timestamp()
     };
     
-    let index = get_project_index(&config_data, String::from("daily-ui"));
+    let index = get_project_index(&config_data, args.parent);
 
     config_data[index].pens.push(pen);
 
     let serialised = serde_json::to_string_pretty(&config_data).unwrap();
-
-    println!("{:?}", serialised);
 
     write("config.json", serialised).expect("Unable to write file");
 }
@@ -52,18 +61,6 @@ fn get_config_data(path: String) -> Result<Vec::<Project>, serde_json::error::Er
     Ok(projects)
 }
 
-// // extract an individual project
-// fn get_project_from_config(config: Vec<Project>, project_name: String) -> Project {
-//     let proj = config
-//         .into_iter()
-//         .find(|p| p.name == project_name.as_str());
-    
-//     match proj {
-//         Some(p) => p,
-//         None => panic!(format!("No project with the name \"{}\" exists!", project_name))
-//     }
-// }
-
 fn get_project_index(config: &Vec<Project>, project_name: String) -> usize {
     let index = config
         .into_iter()
@@ -77,6 +74,66 @@ fn get_project_index(config: &Vec<Project>, project_name: String) -> usize {
 
 fn get_timestamp() -> u64 {
     SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
+}
+
+// Function to determine the path to scaffold the files to
+fn get_args() -> ProjectType {
+
+    // get the args
+    let args: Vec<String> = env::args().collect();
+
+    println!("ARGS: {:?}", args);
+
+    assert_eq!(args.len(), 4);
+
+    let flavour = &args[1];
+    let path = &args[2];
+    let name = &args[3];
+
+    // only allow 2 levels deep. This means that projects can be flattly grouped under an umbrella directory
+    let paths: Vec<&str> = path.split('/').collect();
+    assert_eq!(paths.len(), 2);
+    let parent = paths[0];
+
+    ProjectType { 
+        parent: parent.to_owned(),
+        flavour: flavour.to_owned(),
+        name: name.to_owned(),
+        path: path.to_owned()
+    }
+
+    // let flavour: String = args
+    //     .into_iter()
+    //     .find(|x| x.contains("--flavour"))
+    //     .unwrap()
+    //     .split('=')
+    //     .collect();
+    // println!("FLAVOUR {:?}", flavour);
+
+    // let name = String::from("A friendly name");
+    // let path = String::from("/blah/blah");
+
+    // ProjectType { flavour, name, path }
+
+    // // the directory should be the second arg
+    // let path = &args[1];
+
+    // // split on the slash
+    // let paths: Vec<&str> = path.split('/').collect();
+
+    // // only allow 2 levels deep. This means that projects can be flattly grouped under an umbrella directory
+    // assert_eq!(paths.len(), 2);
+
+    // let project: Project = Project { 
+    //     parent: String::from(paths[0]),
+    //     pen_name: String::from(paths[1])
+    // };
+
+    // // can do this with the debug trait
+    // println!("{:?}", project);
+
+    // // return the populated project struct
+    // project
 }
 
 // ---------------------------------------------------------
