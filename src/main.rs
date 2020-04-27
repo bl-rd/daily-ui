@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::fs::{read_to_string};
+use std::fs::{read_to_string, write};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 // use std::error::Error;
@@ -21,19 +21,25 @@ struct Pen {
 }
 
 fn main() {
-    let config_data = get_config_data("config.json".to_owned()).unwrap();
+    let mut config_data = get_config_data("config.json".to_owned()).unwrap();
 
-    let mut project = get_project_from_config(config_data, "daily-ui".to_owned());
+//     let mut project = get_project_from_config(config_data, "daily-ui".to_owned());
 
     let pen: Pen = Pen {
         path: String::from("some/other/amazing-path"),
         text: String::from("Why hello!"),
         timestamp: get_timestamp()
     };
+    
+    let index = get_project_index(&config_data, String::from("daily-ui"));
 
-    project.pens.push(pen);
+    config_data[index].pens.push(pen);
 
-    println!("{:?}", project);
+    let serialised = serde_json::to_string_pretty(&config_data).unwrap();
+
+    println!("{:?}", serialised);
+
+    write("config.json", serialised).expect("Unable to write file");
 }
 
 // Get the deserialised config file
@@ -46,14 +52,25 @@ fn get_config_data(path: String) -> Result<Vec::<Project>, serde_json::error::Er
     Ok(projects)
 }
 
-// extract an individual project
-fn get_project_from_config(config: Vec<Project>, project_name: String) -> Project {
-    let proj = config
-        .into_iter()
-        .find(|p| p.name == project_name.as_str());
+// // extract an individual project
+// fn get_project_from_config(config: Vec<Project>, project_name: String) -> Project {
+//     let proj = config
+//         .into_iter()
+//         .find(|p| p.name == project_name.as_str());
     
-    match proj {
-        Some(p) => p,
+//     match proj {
+//         Some(p) => p,
+//         None => panic!(format!("No project with the name \"{}\" exists!", project_name))
+//     }
+// }
+
+fn get_project_index(config: &Vec<Project>, project_name: String) -> usize {
+    let index = config
+        .into_iter()
+        .position(|p| p.name == project_name.as_str());
+
+    match index {
+        Some(i) => i,
         None => panic!(format!("No project with the name \"{}\" exists!", project_name))
     }
 }

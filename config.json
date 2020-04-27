@@ -6,9 +6,20 @@
         "path": "a/path/goes/here",
         "text": "some friendly text",
         "timestamp": 1587381020
+      },
+      {
+        "path": "some/other/amazing-path",
+        "text": "Why hello!",
+        "timestamp": 1588019101
+      },
+      {
+        "path": "some/other/amazing-path",
+        "text": "Why hello!",
+        "timestamp": 1588019189
       }
     ]
-  }, {
+  },
+  {
     "name": "labs",
     "pens": [
       {
