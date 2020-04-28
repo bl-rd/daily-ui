@@ -39,3 +39,9 @@ e.g.
 ```bash
 cargo run rust labs/rss-reader "In browser RSS reader"
 ```
+
+## TODO
+
+- Support scaffolding a wasm-pack scaffold that targets `--web` (i.e. does not need webpack)
+- Support a JavaScript scaffold
+- Build the HTML files
