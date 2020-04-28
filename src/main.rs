@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
-use std::env;
-
+use std::env::{args, set_current_dir};
 use std::fs::{read_to_string, write};
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::process::Command;
+use std::path::Path;
 
 // use std::error::Error;
 // use std::fs::File;
@@ -25,6 +26,7 @@ struct Pen {
 #[derive(Debug)]
 struct ProjectType {
     parent: String,
+    directory: String,
     flavour: String,
     path: String,
     name: String
@@ -35,6 +37,9 @@ fn main() {
     let args = get_args();
 
     let mut config_data = get_config_data("config.json".to_owned()).unwrap();
+
+    let template_directory = args.directory.clone();
+    let template_collection = args.parent.clone();
 
     let pen: Pen = Pen {
         path: args.path,
@@ -47,6 +52,8 @@ fn main() {
     config_data[index].pens.push(pen);
 
     let serialised = serde_json::to_string_pretty(&config_data).unwrap();
+
+    build_wasm_template(template_collection, template_directory);
 
     write("config.json", serialised).expect("Unable to write file");
 }
@@ -80,9 +87,7 @@ fn get_timestamp() -> u64 {
 fn get_args() -> ProjectType {
 
     // get the args
-    let args: Vec<String> = env::args().collect();
-
-    println!("ARGS: {:?}", args);
+    let args: Vec<String> = args().collect();
 
     assert_eq!(args.len(), 4);
 
@@ -94,9 +99,11 @@ fn get_args() -> ProjectType {
     let paths: Vec<&str> = path.split('/').collect();
     assert_eq!(paths.len(), 2);
     let parent = paths[0];
+    let directory = paths[1];
 
     ProjectType { 
         parent: parent.to_owned(),
+        directory: directory.to_owned(),
         flavour: flavour.to_owned(),
         name: name.to_owned(),
         path: path.to_owned()
@@ -134,6 +141,35 @@ fn get_args() -> ProjectType {
 
     // // return the populated project struct
     // project
+}
+
+fn build_wasm_template(collection: String, project: String) {
+    let proj = format!("./pens/{}/", collection);
+    let path = Path::new(&proj);
+    assert!(set_current_dir(&path).is_ok());
+    // // Command::new("mkdir")
+    // //     .arg("-p")
+    // //     .arg(proj)
+    // //     .output()
+    // //     .expect("Failed to write directory");
+    
+    // println!("{}", proj);
+
+    // Command::new("cd")
+    //     .arg(proj)
+    //     .output()
+    //     .expect("Unable to cd to parent directory");
+    
+    Command::new("wasm-pack")
+        .arg("new")
+        .arg(project)
+        .output()
+        .expect("Unable to scaffold wasm-pack template");
+    
+    // // Command::new("cd")
+    // //     .arg("../")
+    // //     .output()
+    // //     .expect("Unable to cd back to root level");
 }
 
 // ---------------------------------------------------------
