@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fs::{write};
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Project {
@@ -32,18 +33,22 @@ pub fn run() {
     Err(_) => panic!("Unable to get config data")
   };
 
+  build_root_page();
+
   build_landing_page(&projects);
 
-  let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
-  let mut list_markup: String = String::new();
-
-  for p in projects.iter() {
-    for pen in p.pens.iter() {
-      list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
-    }
+  for project in projects.iter() {
+    build_project_page(project);
   }
 
-  println!("{}", list_markup);
+  // for p in projects.iter() {
+  //   for pen in p.pens.iter() {
+  //     list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
+  //   }
+  // }
+
+  // println!("{}", list_markup);
+  // write("index.html", list_markup).expect("unable to create index file");
 }
 
 // Get the deserialised config file
@@ -67,17 +72,18 @@ fn get_html_template(path: String) -> String {
 // Build the <li> HTML for project pages.
 // This might be more reusable if it takes separate href and text arguments
 fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String {
-  let mut markup = html.replace("{{ HREF }}", href.as_str());
+  let link = format!("/pens/{}", href);
+  let mut markup = html.replace("{{ HREF }}", link.as_str());
   markup = markup.replace("{{ TEXT }}", text.as_str());
   
   markup
 }
 
 // Loop through the top level
-// projects and build the root index.html page
+// projects and build the pens index.html page
 fn build_landing_page(data: &Vec<Project>) {
 
-  let mut page_markup_template = get_html_template(String::from("html/partials/page-template.html"));
+  let mut page_markup_template = get_html_template(String::from("html/templates/list-page.html"));
   page_markup_template = page_markup_template.replace("{{ PAGE_TITLE_TEMPLATE }}", "Pens page");
 
   let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
@@ -89,5 +95,30 @@ fn build_landing_page(data: &Vec<Project>) {
 
   page_markup_template = page_markup_template.replace("{{ LIST_TEMPLATE }}", list_markup.as_str());
 
-  println!("{}", page_markup_template);
+  // println!("{}", page_markup_template);
+  write("pens/index.html", page_markup_template).expect("unable to create index file");
+}
+
+fn build_project_page(project: &Project) {
+  let mut page_template = get_html_template(String::from("html/templates/list-page.html"));
+  page_template = page_template.replace("{{ PAGE_TITLE_TEMPLATE }}", project.text.as_str());
+
+  let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
+  let mut list_markup = String::new();
+
+  for pen in project.pens.iter() {
+    // list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
+    list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
+  }
+
+  page_template = page_template.replace("{{ LIST_TEMPLATE }}", list_markup.as_str());
+  
+  write(format!("pens/{}/index.html", project.name), page_template).expect("unable to create project page");
+}
+
+fn build_root_page() {
+  let markup_template = get_html_template(String::from("html/templates/root.html"));
+
+  // don't need to actually do any transformation currently...
+  write("index.html", markup_template).expect("unable to create root page");
 }

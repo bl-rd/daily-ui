@@ -1,10 +1,25 @@
 [
   {
     "name": "daily-ui",
-    "pens": []
+    "text": "Daily UI",
+    "pens": [
+      {
+        "path": "daily-ui/login-page",
+        "text": "Login page",
+        "flavour": "js",
+        "timestamp": 1588193362
+      },
+      {
+        "path": "daily-ui/second-example",
+        "text": "Second example",
+        "flavour": "js",
+        "timestamp": 1588194470
+      }
+    ]
   },
   {
     "name": "labs",
+    "text": "Labs",
     "pens": []
   }
 ]
