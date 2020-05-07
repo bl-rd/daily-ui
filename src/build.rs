@@ -1,3 +1,4 @@
+extern crate minifier;
 use serde::{Deserialize, Serialize};
 use std::fs::{write};
 
@@ -25,6 +26,12 @@ struct ProjectType {
     name: String
 }
 
+const CSS_PLACEHOLDER: &str = "/* CSS_INCLUDE */";
+const TITLE_PLACEHOLDER: &str = "{{ PAGE_TITLE_TEMPLATE }}";
+const LIST_PLACEHOLDER: &str = "{{ LIST_TEMPLATE }}";
+const HREF_PLACEHOLDER: &str = "{{ HREF }}";
+const LINK_TEXT_PLACEHOLDER: &str = "{{ TEXT }}";
+
 pub fn run() {
   let data = get_config_data(String::from("config.json"));
 
@@ -40,15 +47,6 @@ pub fn run() {
   for project in projects.iter() {
     build_project_page(project);
   }
-
-  // for p in projects.iter() {
-  //   for pen in p.pens.iter() {
-  //     list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
-  //   }
-  // }
-
-  // println!("{}", list_markup);
-  // write("index.html", list_markup).expect("unable to create index file");
 }
 
 // Get the deserialised config file
@@ -64,7 +62,11 @@ fn get_config_data(path: String) -> Result<Vec::<Project>, serde_json::error::Er
 // Load a HTML template as a String
 // from the file system
 fn get_html_template(path: String) -> String {
-  let markup = std::fs::read_to_string(path).unwrap();
+  let mut markup = std::fs::read_to_string(path).unwrap();
+
+  if markup.contains(&CSS_PLACEHOLDER) {
+    markup = markup.replace(CSS_PLACEHOLDER, get_root_css().as_str());
+  }
 
   String::from(markup)
 }
@@ -73,8 +75,8 @@ fn get_html_template(path: String) -> String {
 // This might be more reusable if it takes separate href and text arguments
 fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String {
   let link = format!("/pens/{}", href);
-  let mut markup = html.replace("{{ HREF }}", link.as_str());
-  markup = markup.replace("{{ TEXT }}", text.as_str());
+  let mut markup = html.replace(HREF_PLACEHOLDER, link.as_str());
+  markup = markup.replace(LINK_TEXT_PLACEHOLDER, text.as_str());
   
   markup
 }
@@ -84,7 +86,7 @@ fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String 
 fn build_landing_page(data: &Vec<Project>) {
 
   let mut page_markup_template = get_html_template(String::from("html/templates/list-page.html"));
-  page_markup_template = page_markup_template.replace("{{ PAGE_TITLE_TEMPLATE }}", "Pens page");
+  page_markup_template = page_markup_template.replace(TITLE_PLACEHOLDER, "Pens");
 
   let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
   let mut list_markup = String::new();
@@ -93,7 +95,7 @@ fn build_landing_page(data: &Vec<Project>) {
     list_markup.push_str(build_pen_list_markup(&list_markup_template, &project.name, &project.text).as_str());
   }
 
-  page_markup_template = page_markup_template.replace("{{ LIST_TEMPLATE }}", list_markup.as_str());
+  page_markup_template = page_markup_template.replace(LIST_PLACEHOLDER, list_markup.as_str());
 
   // println!("{}", page_markup_template);
   write("pens/index.html", page_markup_template).expect("unable to create index file");
@@ -101,7 +103,7 @@ fn build_landing_page(data: &Vec<Project>) {
 
 fn build_project_page(project: &Project) {
   let mut page_template = get_html_template(String::from("html/templates/list-page.html"));
-  page_template = page_template.replace("{{ PAGE_TITLE_TEMPLATE }}", project.text.as_str());
+  page_template = page_template.replace(TITLE_PLACEHOLDER, project.text.as_str());
 
   let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
   let mut list_markup = String::new();
@@ -111,7 +113,7 @@ fn build_project_page(project: &Project) {
     list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
   }
 
-  page_template = page_template.replace("{{ LIST_TEMPLATE }}", list_markup.as_str());
+  page_template = page_template.replace(LIST_PLACEHOLDER, list_markup.as_str());
   
   write(format!("pens/{}/index.html", project.name), page_template).expect("unable to create project page");
 }
@@ -121,4 +123,10 @@ fn build_root_page() {
 
   // don't need to actually do any transformation currently...
   write("index.html", markup_template).expect("unable to create root page");
+}
+
+fn get_root_css() -> String {
+  let css = get_html_template(String::from("assets/css/main.css"));
+
+  minifier::css::minify(css.as_str()).unwrap()
 }

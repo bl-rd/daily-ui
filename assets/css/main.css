@@ -1,0 +1,28 @@
+:root {
+  --black: #111;
+  --white: #eee;
+
+  --font-colour: var(--black);
+  --background-colour: var(--white;)
+}
+
+* {
+  font-family: 'Manrope', sans-serif;
+  text-transform: uppercase;
+  color: #111;
+  color: var(--font-colour);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-colour);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-colour: var(--white);
+    --background-colour: var(--black);
+  }
+}

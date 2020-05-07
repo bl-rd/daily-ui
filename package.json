@@ -6,10 +6,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified!!\"",
-    "go": "./target/release/pens"
+    "build": "./target/release/pens build",
+    "go": "./target/release/pens",
+    "serve": "hs -o"
   },
   "keywords": [],
   "author": "Bill Reid <me@bl-rd.dev> (https://bl-rd.dev)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  }
 }
