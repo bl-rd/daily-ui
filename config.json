@@ -1,25 +1,20 @@
 [
   {
-    "name": "daily-ui",
-    "text": "Daily UI",
+    "name": "codepen",
+    "text": "Codepen challenges",
     "pens": [
       {
-        "path": "daily-ui/login-page",
-        "text": "Login page",
+        "path": "codepen/forms-challenge",
+        "text": "Forms Challenge",
         "flavour": "js",
-        "timestamp": 1588193362
+        "timestamp": 1588883848
       },
       {
-        "path": "daily-ui/second-example",
-        "text": "Second example",
+        "path": "codepen/colour-pop",
+        "text": "Colour pop!",
         "flavour": "js",
-        "timestamp": 1588194470
+        "timestamp": 1588884133
       }
     ]
-  },
-  {
-    "name": "labs",
-    "text": "Labs",
-    "pens": []
   }
 ]

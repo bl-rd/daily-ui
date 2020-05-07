@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Questrial');
+
+:root {
+  --background: #efefee;
+  --font: #121211;
+  --button: #83A37F;
+}
+
+* {
+  font-family: 'Questrial', sans-serif;
+}
+
+html {
+  overflow: hidden;
+}
+
+section {
+  background: var(--background);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+p,
+label {
+  font-size: 7vh;
+  color: var(--font);
+  margin-bottom: 2rem;
+}
+
+fieldset {
+  border: none;
+  position: absolute;
+  left: 90vw;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.4s ease;
+  display: grid;
+}
+
+input {
+  font-size: 4vw;
+  background: none;
+  border: none;
+  color: var(--font);
+  border-bottom: 1vh solid var(--font);
+}
+
+button {
+  font-size: 4vh;
+  padding: 2rem;
+  background: rgba(131, 163, 127, 0);
+  border: 0.2rem solid var(--button);
+  border-radius: 0.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  color: white;
+  background: rgba(131, 163, 127, 1);
+}
+
+fieldset.focused {
+  left: 50vw;
+  opacity: 1;
+}
+
+fieldset[name="confirm"] {
+  display: block;
+}
+
+fieldset[name="confirm"] label {
+  display: block;
+}
+
+.intro,
+fieldset {
+  width: 75%;
+}

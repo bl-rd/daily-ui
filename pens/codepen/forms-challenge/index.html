@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forms challenge</title>
+  <link rel="preload" as="style" href="./style.css" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <section>
+    <div class="intro">
+      <p><strong>Hello fellow Human!</strong></p>
+      <p>Before you can plug in to the mainframe, I need some information.</p>
+      <p><em>Use (shift)tab to navigate.</em></p>
+      <button type="button">🚀 Let's go</button>
+    </div>
+    <form action="">
+      <fieldset name="first-name">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" />
+      </fieldset>
+      <fieldset name="second-name">
+        <label for="second-name">Second Name</label>
+        <input type="text" id="second-name" />
+      </fieldset>
+      <fieldset name="dob">
+        <label for="dob">Date of birth</label>
+        <input type="date" id="dob" />
+      </fieldset>
+      <fieldset name="email">
+        <label for="email">Email address</label>
+        <input type="email" id="email" />
+      </fieldset>
+      <fieldset name="password">
+        <label for="password">Password</label>
+        <input type="password" id="password" />
+      </fieldset>
+      <fieldset name="password-check">
+        <label for="password-check">Password check</label>
+        <input type="password" id="password-check" />
+      </fieldset>
+      <fieldset name="confirm">
+        <label>Thanks meatbag! You're good to go.</label>
+        <button type="submit">👌 Submit</button>
+      </fieldset>
+  </section>
+
+  <script defer src="./main.js"></script>
+</body>
+
+</html>
