@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One&display=swap');
+
+:root {
+  --colour-1: #E0EE0C;
+  --colour-2: #FE4665;
+  --stripe-width: 10vmin;
+  --rotation: -45deg;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  overflow: none;
+}
+
+.background {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(var(--rotation),
+      var(--colour-1),
+      var(--colour-1) var(--stripe-width),
+      var(--colour-2) var(--stripe-width),
+      var(--colour-2) calc(var(--stripe-width) * 2));
+}
+
+.clipped {
+  --rotation: -45deg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: repeating-linear-gradient(var(--rotation),
+      var(--colour-2),
+      var(--colour-2) var(--stripe-width),
+      var(--colour-1) var(--stripe-width),
+      var(--colour-1) calc(var(--stripe-width) * 2));
+  font-family: 'Fredoka One', monospace;
+  font-weight: bold;
+  font-size: 20vmin;
+  font-size: clamp(2em, calc(1em + 30vw), 40vw);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: rgba(0, 0, 0, 0.01);
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: "";
+}

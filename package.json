@@ -8,7 +8,7 @@
   "scripts": {
     "build": "./target/release/pens build",
     "go": "./target/release/pens",
-    "serve": "hs -o"
+    "serve": "npm run build && hs -o"
   },
   "keywords": [],
   "author": "Bill Reid <me@bl-rd.dev> (https://bl-rd.dev)",

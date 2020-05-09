@@ -14,6 +14,54 @@
         "text": "Colour pop!",
         "flavour": "js",
         "timestamp": 1588884133
+      },
+      {
+        "path": "codepen/every-open-eye",
+        "text": "Every open eye",
+        "flavour": "js",
+        "timestamp": 1589007794
+      },
+      {
+        "path": "codepen/triangles",
+        "text": "Triangles",
+        "flavour": "js",
+        "timestamp": 1589009157
+      },
+      {
+        "path": "codepen/circles",
+        "text": "Circles",
+        "flavour": "js",
+        "timestamp": 1589009415
+      },
+      {
+        "path": "codepen/gravity-hamster",
+        "text": "Gravity hamster",
+        "flavour": "js",
+        "timestamp": 1589009699
+      },
+      {
+        "path": "codepen/oodles-of-noodles",
+        "text": "Oodles of noodles",
+        "flavour": "js",
+        "timestamp": 1589009996
+      },
+      {
+        "path": "codepen/lines",
+        "text": "Lines",
+        "flavour": "js",
+        "timestamp": 1589010245
+      },
+      {
+        "path": "codepen/classic-header",
+        "text": "Classic header",
+        "flavour": "js",
+        "timestamp": 1589010649
+      },
+      {
+        "path": "codepen/size-and-shape",
+        "text": "Size and shape",
+        "flavour": "js",
+        "timestamp": 1589010918
       }
     ]
   }

@@ -9,6 +9,7 @@ use std::path::Path;
 #[derive(Deserialize, Serialize, Debug)]
 struct Project {
     name: String,
+    text: String,
     pens: Vec<Pen>
 }
 

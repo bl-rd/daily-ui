@@ -1,0 +1,131 @@
+:root {
+  --triangle-size: 200px;
+  --triangle-border-size: 207px;
+
+  --small-size: 100px;
+  --small-border-size: 102px;
+
+  --yellow: #fcf93c;
+
+  --shadow-height: 15px;
+  --shadow: #333;
+
+  /* --background: #9ffc3c; */
+  --background: #3cfcf9;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background: var(--background);
+}
+
+.triangle-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float;
+}
+
+.left {
+  transform: translateX(calc(var(--triangle-border-size) * -1 / 1.6)) translateY(calc(var(--triangle-size) - 10px));
+}
+
+.right {
+  transform: translateX(calc(var(--triangle-border-size) / 2.6)) translateY(calc(var(--triangle-size) - 10px));
+}
+
+.outline {
+  width: var(--triangle-border-size);
+  height: var(--triangle-border-size);
+  background: var(--shadow);
+  clip-path: polygon(50% 5%, 0% 100%, 100% 100%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.triangle {
+  width: var(--triangle-size);
+  height: var(--triangle-size);
+  background: var(--yellow);
+  clip-path: polygon(50% 5%, 0% 100%, 100% 100%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.triangle-highlight {
+  width: 50px;
+  height: 10px;
+  border-radius: 5px;
+  background: white;
+  transform: rotate(-66deg);
+  z-index: 100;
+  position: relative;
+  left: calc(var(--triangle-size) / 8 * -1);
+}
+
+.triangle-highlight-small {
+  width: 20px;
+  left: calc(var(--triangle-size) / 6 * -1);
+  top: calc(var(--triangle-size) / 5);
+}
+
+.shadow {
+  position: relative;
+  top: calc(var(--triangle-border-size) + 20px);
+  width: calc(var(--triangle-border-size) * 2);
+  height: var(--shadow-height);
+  background: var(--shadow);
+  border-radius: calc(var(--shadow-height) / 2);
+  animation-name: pulse;
+  opacity: 0.8;
+}
+
+.animate {
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes float {
+  0% {
+    top: 25%;
+  }
+
+  50% {
+    top: 26%;
+  }
+
+  100% {
+    top: 25%;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    width: calc(var(--triangle-border-size) * 1.6);
+  }
+
+  50% {
+    width: calc(var(--triangle-border-size) * 1.8);
+  }
+
+  100% {
+    width: calc(var(--triangle-border-size) * 1.6);
+  }
+}
