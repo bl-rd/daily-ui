@@ -74,8 +74,9 @@ fn get_html_template(path: String) -> String {
 // Build the <li> HTML for project pages.
 // This might be more reusable if it takes separate href and text arguments
 fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String {
-  let link = format!("/pens/{}", href);
-  let mut markup = html.replace(HREF_PLACEHOLDER, link.as_str());
+  let parts = href.split("/");
+  let link = parts.collect::<Vec<_>>().pop().unwrap();
+  let mut markup = html.replace(HREF_PLACEHOLDER, link);
   markup = markup.replace(LINK_TEXT_PLACEHOLDER, text.as_str());
   
   markup
@@ -97,7 +98,6 @@ fn build_landing_page(data: &Vec<Project>) {
 
   page_markup_template = page_markup_template.replace(LIST_PLACEHOLDER, list_markup.as_str());
 
-  // println!("{}", page_markup_template);
   write("pens/index.html", page_markup_template).expect("unable to create index file");
 }
 
@@ -109,7 +109,6 @@ fn build_project_page(project: &Project) {
   let mut list_markup = String::new();
 
   for pen in project.pens.iter() {
-    // list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
     list_markup.push_str(build_pen_list_markup(&list_markup_template, &pen.path, &pen.text).as_str());
   }
 
