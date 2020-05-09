@@ -1,47 +1,48 @@
-# Pens
+# Stuff made by me
 
-TODO: write some information about this project
+I'm trying to learn [Rust](https://www.rust-lang.org/) so I've had a go at making my own (sort of) static site generator! In the spirit of the [IndieWeb](https://indieweb.org/), I'd like to be able to keep a copy of things I'me made in [Codepen]() locally and publish there when I'm ready.
 
-## What??
+This is also going to act as a bit of a ~dumping ground~ experimentation area that can live outside of my [personal website](https://bl-rd.dev/).
 
-- Create a Rust app that includes all the scaffolding files in a directory of choosing (similar to Hugo)
-  - Allow some presets? Similar to taxonomies??
-- Have some sort of config file that can build an index page of all the files
-- Include a dev server?
-- Have a command to build all the files so when running the app the projects can be viewed
-- Link to source files
-- Post to Codepen?? [API](https://blog.codepen.io/documentation/api/prefill/)
+## Requirements
 
-- two types
-  - standard js scaffolding
-  - wasm-pack scaffolding
-
-## What needs to happen...
-
-- cli command to generate new sub-directory
-- need to choose if it's a rust or js project
-- saved in a config file that is used to build the index pages
-
-### MVP
-
-- cli command that adds to the config file
-
-- parse the config file into structured data
-- add the new entry (with unix timestamp)
-- serialize into JSON and write back
-
-## Scaffold a new project
-
-`cargo run <type> <path> <friendly name>`
-
-e.g.
+Needs [Rust](https://www.rust-lang.org/) to run the build process. The easiest way to get everything needed is to install [rustup](https://rustup.rs/). After cloning the repository, make sure to build the program that will build the site.
 
 ```bash
-cargo run rust labs/rss-reader "In browser RSS reader"
+cargo build --release
 ```
 
-## TODO
+Also make sure to run `npm install` (or [Yarn](https://yarnpkg.com/); or [pnpm](https://pnpm.js.org/), which I use).
 
-- Support scaffolding a wasm-pack scaffold that targets `--web` (i.e. does not need webpack)
-- Support a JavaScript scaffold
-- Build the HTML files
+## Building the site
+
+To run locally, run
+
+```bash
+npm run serve
+```
+
+which will build all the html files and start a local web server.
+
+## Creating new pages
+
+There is a `config.json` file that stores all the information for building the site. If a new section is needed, make sure to create it first as this is needed (for now) before any scaffolding takes place. e.g.
+
+```json
+[
+  {
+    "name": "daily-ui",
+    "text": "Daily UI",
+    "pens": []
+  }
+]
+```
+
+Now to scaffold a new project into here, run
+
+```bash
+npm run go -- js daily-ui/login-page "A login page"
+```
+This will create a basic javascript-powered directory under `/pens/daily-ui/login-page`. To create a rust powered hybrid app, change the `js` argument to `rust`. Both of these commands update the `config.json` file automatically.
+
+Make sure to run `npm run build` before commiting.
