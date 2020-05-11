@@ -54,7 +54,12 @@ fn get_config_data(path: String) -> Result<Vec::<Project>, serde_json::error::Er
 
   let config = std::fs::read_to_string(path).unwrap();
 
-  let projects: Vec<Project> = serde_json::from_str(config.as_str())?;
+  let mut projects: Vec<Project> = serde_json::from_str(config.as_str())?;
+
+  // sort the pens, oldest to newest
+  for n in 0..projects.len() {
+    projects[n].pens.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+  }
 
   Ok(projects)
 }
