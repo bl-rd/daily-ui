@@ -92,7 +92,7 @@ fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String 
 fn build_landing_page(data: &Vec<Project>) {
 
   let mut page_markup_template = get_html_template(String::from("html/templates/list-page.html"));
-  page_markup_template = page_markup_template.replace(TITLE_PLACEHOLDER, "Pens");
+  page_markup_template = page_markup_template.replace(TITLE_PLACEHOLDER, "Web");
 
   let list_markup_template = get_html_template(String::from("html/partials/pen-link.html"));
   let mut list_markup = String::new();
@@ -103,7 +103,7 @@ fn build_landing_page(data: &Vec<Project>) {
 
   page_markup_template = page_markup_template.replace(LIST_PLACEHOLDER, list_markup.as_str());
 
-  write("pens/index.html", page_markup_template).expect("unable to create index file");
+  write("web/index.html", page_markup_template).expect("unable to create index file");
 }
 
 fn build_project_page(project: &Project) {
@@ -119,7 +119,7 @@ fn build_project_page(project: &Project) {
 
   page_template = page_template.replace(LIST_PLACEHOLDER, list_markup.as_str());
   
-  write(format!("pens/{}/index.html", project.name), page_template).expect("unable to create project page");
+  write(format!("web/{}/index.html", project.name), page_template).expect("unable to create project page");
 }
 
 fn build_root_page() {

@@ -118,7 +118,7 @@ fn get_args() -> ProjectType {
 }
 
 fn build_wasm_template(collection: String, project: String) {
-    let proj = format!("./pens/{}/", collection);
+    let proj = format!("./web/{}/", collection);
 
     // set the current directory so we can run the scaffolding
     let path = Path::new(&proj);
@@ -133,7 +133,7 @@ fn build_wasm_template(collection: String, project: String) {
 }
 
 fn build_js_template(collection: String, project: String) -> Result<(), std::io::Error> {
-    let proj_dir = format!("./pens/{}/{}", collection, project);
+    let proj_dir = format!("./web/{}/{}", collection, project);
     let scaffold_dir: String = String::from("./scaffold/");
 
     let path = Path::new(&proj_dir);
