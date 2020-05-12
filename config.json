@@ -1,5 +1,17 @@
 [
   {
+    "name": "labs",
+    "text": "labs",
+    "pens": [
+      {
+        "path": "labs/rock-paper-scissors",
+        "text": "Rock, paper, scissors",
+        "flavour": "rust",
+        "timestamp": 1589229596
+      }
+    ]
+  },
+  {
     "name": "codepen",
     "text": "Codepen challenges",
     "pens": [
