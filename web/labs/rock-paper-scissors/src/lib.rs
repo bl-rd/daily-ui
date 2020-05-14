@@ -27,7 +27,9 @@ enum Outcome {
 enum State {
     Menu,
     Play,
-    Outcome
+    Win,
+    Lose,
+    Draw
 }
 
 // This is like the `main` function, except for JavaScript.
@@ -37,6 +39,30 @@ pub fn main_js() -> Result<(), JsValue> {
     // It's disabled in release mode so it doesn't bloat up the file size.
     #[cfg(debug_assertions)]
     console_error_panic_hook::set_once();
+
+
+    let rock_button = query_selector("#rock-button").unwrap();
+    let paper_button = query_selector("#paper-button").unwrap();
+    let scissors_button = query_selector("#scissors-button").unwrap();
+
+    let rock_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
+        play(Choice::Rock);
+    }) as Box<dyn FnMut(_)>);
+
+    let paper_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
+        play(Choice::Paper);
+    }) as Box<dyn FnMut(_)>);
+
+    let scissors_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
+        play(Choice::Scissors);
+    }) as Box<dyn FnMut(_)>);
+
+    rock_button.add_event_listener_with_callback("click", rock_closure.as_ref().unchecked_ref()).unwrap();
+    rock_closure.forget();
+    paper_button.add_event_listener_with_callback("click", paper_closure.as_ref().unchecked_ref()).unwrap();
+    paper_closure.forget();
+    scissors_button.add_event_listener_with_callback("click", scissors_closure.as_ref().unchecked_ref()).unwrap();
+    scissors_closure.forget();
 
     // start the game!
     change_state(State::Menu);
@@ -106,7 +132,11 @@ fn play(player_choice: Choice) {
     let ai_choice = get_random_choice().unwrap();
     console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
     let outcome = battle(player_choice, ai_choice);
-    console_log(get_outcome(outcome).as_str());
+    match outcome {
+        Outcome::Draw => change_state(State::Draw),
+        Outcome::Lose => change_state(State::Lose),
+        Outcome::Win => change_state(State::Win)
+    }
 }
 
 /// Get a random u64 up to, but not including, the max
@@ -135,9 +165,9 @@ fn change_state(state: State) {
     match state {
         State::Menu => init_menu_state(),
         State::Play => init_play_state(),
-        State::Outcome => {
-            console_log("Outcome state");
-        }
+        State::Win => init_outcome_state(Outcome::Win),
+        State::Lose => init_outcome_state(Outcome::Lose),
+        State::Draw => init_outcome_state(Outcome::Draw)
     }
 }
 
@@ -169,31 +199,17 @@ fn init_play_state() {
     play_element
         .remove_attribute("hidden")
         .expect("Can't remove hidden attribute from play element");
-
-    let rock_button = query_selector("#rock-button").unwrap();
-    let paper_button = query_selector("#paper-button").unwrap();
-    let scissors_button = query_selector("#scissors-button").unwrap();
-
-    let rock_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        play(Choice::Rock);
-    }) as Box<dyn FnMut(_)>);
-
-    let paper_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        play(Choice::Paper);
-    }) as Box<dyn FnMut(_)>);
-
-    let scissors_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        play(Choice::Scissors);
-    }) as Box<dyn FnMut(_)>);
-
-    rock_button.add_event_listener_with_callback("click", rock_closure.as_ref().unchecked_ref()).unwrap();
-    rock_closure.forget();
-    paper_button.add_event_listener_with_callback("click", paper_closure.as_ref().unchecked_ref()).unwrap();
-    paper_closure.forget();
-    scissors_button.add_event_listener_with_callback("click", scissors_closure.as_ref().unchecked_ref()).unwrap();
-    scissors_closure.forget();
 }
 
-fn init_outcome_state() {
-    console_log("nope");
+fn init_outcome_state(outcome: Outcome) {
+    let play_element = query_selector(".game__play").unwrap();
+
+    play_element
+        .set_attribute("hidden", "true")
+        .expect("Can't hide play element");
+    console_log(get_outcome(outcome).as_str());
+
+    // todo implement timer
+    console_log("changing state to play");
+    change_state(State::Play);
 }
