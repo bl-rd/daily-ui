@@ -3,9 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <title>My Rust + Webpack project!</title>
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <button id="action-button">Click me!</button>
+    <div class="game game__menu" hidden>
+      <button id="play">Play</button>
+    </div>
+    <div class="game game__play" hidden>
+      <button id="rock-button" data-value="rock">Rock</button>
+      <button id="paper-button" data-value="paper">Paper</button>
+      <button id="scissors-button" data-value="scissors">Scissors</button>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>
