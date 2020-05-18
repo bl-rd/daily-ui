@@ -2,3 +2,20 @@
   display: none;
   visibility: hidden;
 }
+
+body {
+  max-width: 60em;
+  margin: 0 auto;
+}
+
+.game {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.game__element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

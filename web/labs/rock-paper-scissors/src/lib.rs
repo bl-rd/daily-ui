@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-use web_sys::{console, Element};
+use web_sys::{console, Element, HtmlElement};
 use js_sys::{Math};
 
 
@@ -32,6 +32,44 @@ enum State {
     Draw
 }
 
+enum ButtonState {
+    Disabled,
+    Enabled
+}
+
+// The button selectors
+const BUTTON_ROCK_SELECTOR: &str = "#rock";
+const BUTTON_PAPER_SELECTOR: &str = "#paper";
+const BUTTON_SCISSORS_SELECTOR: &str = "#scissors";
+const BUTTON_ACTION_SELECTOR: &str = "#again";
+const BUTTON_PLAY_SELECTOR: &str = "#play";
+
+// the game UI selectors
+const UI_OUTCOME_SELECTOR: &str = ".ui__outcome";
+const UI_PLAY_SELECTOR: &str = ".ui__play";
+const UI_MENU_SELECTOR: &str = ".ui__menu";
+
+const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player .game__element__image";
+const IMAGE_AI_SELECTOR: &str = ".game__element--ai .game__element__image";
+const IMAGE_SELECTOR: &str = ".game__element__image";
+const TEXT_PLAYER_SELECTOR: &str = ".game__element--player .game__element__text";
+const TEXT_AI_SELECTOR: &str = ".game__element--ai .game__element__text";
+const TEXT_SELECTOR: &str = ".game__element__text";
+const RESULT_SELECTOR: &str = ".ui__result";
+
+// choice variables
+const CHOICE_ROCK: &str = "✊";
+const CHOICE_PAPER: &str = "🤚";
+const CHOICE_SCISSORS: &str = "✌";
+
+// result variables
+const RESULT_WIN: &str = "👍";
+const RESULT_LOSE: &str = "👎";
+const RESULT_DRAW: &str = "🖐";
+
+// other options
+const STATE_TRANSITION_TIME: i32 = 2000;
+
 // This is like the `main` function, except for JavaScript.
 #[wasm_bindgen(start)]
 pub fn main_js() -> Result<(), JsValue> {
@@ -41,10 +79,14 @@ pub fn main_js() -> Result<(), JsValue> {
     console_error_panic_hook::set_once();
 
 
-    let rock_button = query_selector("#rock-button").unwrap();
-    let paper_button = query_selector("#paper-button").unwrap();
-    let scissors_button = query_selector("#scissors-button").unwrap();
+    // get references to the UI elements
+    let rock_button = query_selector(BUTTON_ROCK_SELECTOR).unwrap();
+    let paper_button = query_selector(BUTTON_PAPER_SELECTOR).unwrap();
+    let scissors_button = query_selector(BUTTON_SCISSORS_SELECTOR).unwrap();
+    let again_button = query_selector(BUTTON_ACTION_SELECTOR).unwrap();
+    // let outcome_element = query_selector(UI_OUTCOME_SELECTOR).unwrap();
 
+    // all the button callbacks
     let rock_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
         play(Choice::Rock);
     }) as Box<dyn FnMut(_)>);
@@ -57,12 +99,24 @@ pub fn main_js() -> Result<(), JsValue> {
         play(Choice::Scissors);
     }) as Box<dyn FnMut(_)>);
 
+    let again_button_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
+        hide_elements(TEXT_SELECTOR);
+        hide_elements(IMAGE_SELECTOR);
+        hide_elements(UI_OUTCOME_SELECTOR);
+        hide_elements(RESULT_SELECTOR);
+        change_state(State::Play);
+    }) as Box<dyn FnMut(_)>);
+
+    // Add the event listeners to all the game buttons
     rock_button.add_event_listener_with_callback("click", rock_closure.as_ref().unchecked_ref()).unwrap();
     rock_closure.forget();
     paper_button.add_event_listener_with_callback("click", paper_closure.as_ref().unchecked_ref()).unwrap();
     paper_closure.forget();
     scissors_button.add_event_listener_with_callback("click", scissors_closure.as_ref().unchecked_ref()).unwrap();
     scissors_closure.forget();
+
+    again_button.add_event_listener_with_callback("click", again_button_closure.as_ref().unchecked_ref()).unwrap();
+    again_button_closure.forget();
 
     // start the game!
     change_state(State::Menu);
@@ -79,8 +133,17 @@ fn get_choice(choice: &Choice) -> String {
     }
 }
 
+/// Get the image based on the choice
+fn get_choice_image(choice: &Choice) -> String {
+    match choice {
+        Choice::Rock => String::from(CHOICE_ROCK),
+        Choice::Paper => String::from(CHOICE_PAPER),
+        Choice::Scissors => String::from(CHOICE_SCISSORS)
+    }
+}
+
 /// Convert the outcome to it's corresponding String value
-fn get_outcome(outcome: Outcome) -> String {
+fn get_outcome(outcome: &Outcome) -> String {
     match outcome {
         Outcome::Win => String::from("You win!"),
         Outcome::Lose => String::from("You lose!"),
@@ -100,7 +163,7 @@ fn get_random_choice() -> Option<Choice> {
 }
 
 /// Determine the outcome based on the two choices
-fn battle(player_choice: Choice, ai_choice: Choice) -> Outcome {
+fn battle(player_choice: &Choice, ai_choice: &Choice) -> Outcome {
     match player_choice {
         Choice::Rock => {
             match ai_choice {
@@ -126,17 +189,62 @@ fn battle(player_choice: Choice, ai_choice: Choice) -> Outcome {
     }
 }
 
+/// Helper function to enable/disable the play buttons
+fn update_button_disabled_state(state: ButtonState) {
+    let rock_button = query_selector(BUTTON_ROCK_SELECTOR).unwrap();
+    let paper_button = query_selector(BUTTON_PAPER_SELECTOR).unwrap();
+    let scissors_button = query_selector(BUTTON_SCISSORS_SELECTOR).unwrap();
+
+    match state {
+        ButtonState::Disabled => {
+            rock_button.set_attribute("disabled", "true").expect("Unable to update element's disabled state");
+            paper_button.set_attribute("disabled", "true").expect("Unable to update element's disabled state");
+            scissors_button.set_attribute("disabled", "true").expect("Unable to update element's disabled state");
+        },
+        ButtonState::Enabled => {
+            rock_button.remove_attribute("disabled").expect("Can't remove disabled attribute from button element");
+            paper_button.remove_attribute("disabled").expect("Can't remove disabled attribute from button element");
+            scissors_button.remove_attribute("disabled").expect("Can't remove disabled attribute from button element");
+        }
+    }    
+}
+
 /// Function to have a simple game, based on player choice
 fn play(player_choice: Choice) {
-    console_log(format!("You chose {}", get_choice(&player_choice)).as_str());
-    let ai_choice = get_random_choice().unwrap();
-    console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
-    let outcome = battle(player_choice, ai_choice);
-    match outcome {
-        Outcome::Draw => change_state(State::Draw),
-        Outcome::Lose => change_state(State::Lose),
-        Outcome::Win => change_state(State::Win)
-    }
+    update_button_disabled_state(ButtonState::Disabled);
+
+    let window = web_sys::window().expect("Should have a window...");
+    let closure = Closure::wrap(Box::new(move || {
+        console_log(format!("You chose {}", get_choice(&player_choice)).as_str());
+        let ai_choice = get_random_choice().unwrap();
+        console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
+
+        let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
+        let player_text = query_selector(TEXT_PLAYER_SELECTOR).unwrap();
+        let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
+        let ai_text = query_selector(TEXT_AI_SELECTOR).unwrap();
+
+        // update the images
+        player_image.set_inner_text(get_choice_image(&player_choice).as_str());
+        ai_image.set_inner_text(get_choice_image(&ai_choice).as_str());
+
+        // update the text
+        player_text.set_inner_text(get_choice(&player_choice).as_str());
+        ai_text.set_inner_text(get_choice(&ai_choice).as_str());
+        show_elements(TEXT_SELECTOR);
+
+        let outcome = battle(&player_choice, &ai_choice);
+        match outcome {
+            Outcome::Draw => change_state(State::Draw),
+            Outcome::Win => change_state(State::Win),
+            Outcome::Lose => change_state(State::Lose)
+        }
+    }) as Box<dyn FnMut()>);
+    window.set_timeout_with_callback_and_timeout_and_arguments_0(closure.as_ref().unchecked_ref(), STATE_TRANSITION_TIME)
+        .expect("Unable to do timeout");
+    closure.forget();
+
+    console_log("Waiting 3 seconds for transition...");
 }
 
 /// Get a random u64 up to, but not including, the max
@@ -146,13 +254,41 @@ fn get_random_int(max: u64) -> u64 {
 }
 
 /// Wrapper for the query_element API
-fn query_selector(selector: &str) -> Option<Element> {
+fn query_selector(selector: &str) -> Option<HtmlElement> {
     let body: Element = web_sys::window()
         ?.document()
         ?.body()
         ?.into();
 
-    body.query_selector(selector).ok()?
+    let element = body.query_selector(selector)
+        .ok()?
+        .unwrap();
+    
+    // convert into HtmlElement as this has more useful methods
+    element.dyn_into::<HtmlElement>().ok()
+}
+
+fn query_selector_all(selector: &str) -> Option<Vec::<HtmlElement>> {
+    let body: web_sys::Document = web_sys::window()
+        ?.document()
+        ?.into();
+    
+    let nodes = body.query_selector_all(selector)
+        .ok()?;
+    
+    let mut elements: Vec::<HtmlElement> = Vec::<HtmlElement>::new();
+
+    for n in 0..nodes.length() {
+        let e: HtmlElement = nodes
+            .item(n)
+            .unwrap()
+            .dyn_into::<HtmlElement>()
+            .ok()
+            .unwrap();
+        elements.push(e);
+    };
+
+    Some(elements)
 }
 
 /// wrapper for the web_sys console::log_1 method
@@ -173,20 +309,16 @@ fn change_state(state: State) {
 
 /// logic for the "menu" state of the game
 fn init_menu_state() {
-    let menu_element = query_selector(".game__menu").unwrap();
 
-    menu_element
-        .remove_attribute("hidden")
-        .expect("Can't remove hidden attribute from menu element");
+    show_elements(UI_MENU_SELECTOR);
 
     // get the button element
-    let play_button = query_selector("button#play").unwrap();
+    let play_button = query_selector(BUTTON_PLAY_SELECTOR).unwrap();
+
     // if the button is clicked, update the state
     let play_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        match menu_element.set_attribute("hidden", "true") {
-            Ok(()) => change_state(State::Play),
-            Err(_) => console_log("Unable to hide menu element")
-        }
+        hide_elements(UI_MENU_SELECTOR);
+        change_state(State::Play);
     }) as Box<dyn FnMut(_)>);
     play_button.add_event_listener_with_callback("click", play_closure.as_ref().unchecked_ref()).unwrap();
     play_closure.forget();
@@ -194,22 +326,74 @@ fn init_menu_state() {
 
 fn init_play_state() {
 
-    let play_element = query_selector(".game__play").unwrap();
+    show_elements(UI_PLAY_SELECTOR);
 
-    play_element
-        .remove_attribute("hidden")
-        .expect("Can't remove hidden attribute from play element");
+    update_button_disabled_state(ButtonState::Enabled);
 }
 
 fn init_outcome_state(outcome: Outcome) {
-    let play_element = query_selector(".game__play").unwrap();
 
-    play_element
-        .set_attribute("hidden", "true")
-        .expect("Can't hide play element");
-    console_log(get_outcome(outcome).as_str());
+    hide_elements(UI_PLAY_SELECTOR);
+    
+    show_elements(IMAGE_SELECTOR);
 
-    // todo implement timer
-    console_log("changing state to play");
-    change_state(State::Play);
+    let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
+    let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
+
+    let result_text = query_selector(format!("{} h2", RESULT_SELECTOR).as_str()).unwrap();
+    result_text.set_inner_text(get_outcome(&outcome).as_str());
+
+    // closure for the set_timeout.
+    let closure = Closure::wrap(Box::new(move || {
+
+        show_elements(UI_OUTCOME_SELECTOR);
+        show_elements(RESULT_SELECTOR);
+
+        match outcome {
+            Outcome::Draw => {
+                player_image.set_inner_text(RESULT_DRAW);
+                ai_image.set_inner_text(RESULT_DRAW);
+            },
+            Outcome::Lose => {
+                player_image.set_inner_text(RESULT_LOSE);
+                ai_image.set_inner_text(RESULT_WIN);
+            },
+            Outcome::Win => {
+                player_image.set_inner_text(RESULT_WIN);
+                ai_image.set_inner_text(RESULT_LOSE);
+            }
+        };
+
+    }) as Box<dyn FnMut()>);
+
+    let window = web_sys::window().expect("Should have a window...");
+    window
+        .set_timeout_with_callback_and_timeout_and_arguments_0(
+            closure.as_ref().unchecked_ref(),
+            STATE_TRANSITION_TIME
+        )
+        .unwrap();
+    closure.forget();
+}
+
+/// hide elements
+fn hide_elements(selector: &str) {
+    let elements = query_selector_all(selector).unwrap();
+
+    for elem in elements.iter() {
+        elem
+            .set_attribute("hidden", "true")
+            .expect(format!("cannot hide element '{}'", selector).as_str());        
+    }
+}
+
+/// show elements
+fn show_elements(selector: &str) {
+    let elements = query_selector_all(selector).unwrap();
+
+    for elem in elements.iter() {
+        elem
+            .remove_attribute("hidden")
+            .expect(format!("Unable to remove hidden attribute from {}", selector).as_str());
+    }
 }

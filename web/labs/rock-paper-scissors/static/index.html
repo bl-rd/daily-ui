@@ -6,13 +6,31 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <div class="game game__menu" hidden>
-      <button id="play">Play</button>
+    <div class="game">
+      <div class="game__element game__element--player">
+        <div class="game__element__image"></div>
+        <h2 class="game__element__text" hidden></h2>
+      </div>
+      <div class="game__element game__element--ai">
+        <div class="game__element__image"></div>
+        <h2 class="game__element__text" hidden></h2>
+      </div>
     </div>
-    <div class="game game__play" hidden>
-      <button id="rock-button" data-value="rock">Rock</button>
-      <button id="paper-button" data-value="paper">Paper</button>
-      <button id="scissors-button" data-value="scissors">Scissors</button>
+    <div class="ui">
+      <div class="ui__result" hidden>
+        <h2>You win?</h2>
+      </div>
+      <div class="ui__menu" hidden>
+        <button id="play">Play</button>
+      </div>
+      <div class="ui__play" hidden>
+        <button id="rock" data-value="rock">Rock</button>
+        <button id="paper" data-value="paper">Paper</button>
+        <button id="scissors" data-value="scissors">Scissors</button>
+      </div>
+      <div class="ui__outcome" hidden>
+        <button id="again">Play again?</button>
+      </div>
     </div>
     <script src="index.js"></script>
   </body>
