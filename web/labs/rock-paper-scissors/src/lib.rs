@@ -57,11 +57,6 @@ const TEXT_AI_SELECTOR: &str = ".game__element--ai .game__element__text";
 const TEXT_SELECTOR: &str = ".game__element__text";
 const RESULT_SELECTOR: &str = ".ui__result";
 
-// result variables
-const RESULT_WIN: &str = "👍";
-const RESULT_LOSE: &str = "👎";
-const RESULT_DRAW: &str = "🖐";
-
 // other options
 const STATE_TRANSITION_TIME: i32 = 2000;
 
@@ -96,7 +91,8 @@ pub fn main_js() -> Result<(), JsValue> {
     }) as Box<dyn FnMut(_)>);
 
     let again_button_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        hide_elements(TEXT_SELECTOR);
+        // hide_elements(TEXT_SELECTOR);
+        reset_text(TEXT_SELECTOR);
         hide_elements(IMAGE_SELECTOR);
         hide_elements(UI_OUTCOME_SELECTOR);
         hide_elements(RESULT_SELECTOR);
@@ -389,4 +385,13 @@ fn update_image(img: &HtmlElement, selection: &Choice) {
 
     img.set_attribute("src", img_src).expect("unable to set img src");
     img.set_attribute("alt", img_alt).expect("unable to set img alt");
+}
+
+/// reset the text to an empty string to preserve layout
+fn reset_text(selector: &str) {
+    let elements = query_selector_all(selector).unwrap();
+
+    for elem in elements.iter() {
+        elem.set_inner_html("&nbsp;");
+    }
 }
