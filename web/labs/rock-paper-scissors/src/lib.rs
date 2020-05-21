@@ -50,7 +50,9 @@ const UI_PLAY_SELECTOR: &str = ".ui__play";
 const UI_MENU_SELECTOR: &str = ".ui__menu";
 
 const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player .game__element__image";
+const IMAGE_PLAYER_SELECTOR_2: &str = ".game__element--player img";
 const IMAGE_AI_SELECTOR: &str = ".game__element--ai .game__element__image";
+const IMAGE_AI_SELECTOR_2: &str = ".game__element--ai img";
 const IMAGE_SELECTOR: &str = ".game__element__image";
 const TEXT_PLAYER_SELECTOR: &str = ".game__element--player .game__element__text";
 const TEXT_AI_SELECTOR: &str = ".game__element--ai .game__element__text";
@@ -84,7 +86,8 @@ pub fn main_js() -> Result<(), JsValue> {
     let paper_button = query_selector(BUTTON_PAPER_SELECTOR).unwrap();
     let scissors_button = query_selector(BUTTON_SCISSORS_SELECTOR).unwrap();
     let again_button = query_selector(BUTTON_ACTION_SELECTOR).unwrap();
-    // let outcome_element = query_selector(UI_OUTCOME_SELECTOR).unwrap();
+    let player_image = query_selector(IMAGE_PLAYER_SELECTOR_2).unwrap();
+    let ai_image = query_selector(IMAGE_AI_SELECTOR_2).unwrap();
 
     // all the button callbacks
     let rock_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
@@ -104,6 +107,8 @@ pub fn main_js() -> Result<(), JsValue> {
         hide_elements(IMAGE_SELECTOR);
         hide_elements(UI_OUTCOME_SELECTOR);
         hide_elements(RESULT_SELECTOR);
+        update_image(&player_image, &Choice::Rock);
+        update_image(&ai_image, &Choice::Rock);
         change_state(State::Play);
     }) as Box<dyn FnMut(_)>);
 
@@ -220,13 +225,18 @@ fn play(player_choice: Choice) {
         console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
 
         let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
+        let player_image_2 = query_selector(IMAGE_PLAYER_SELECTOR_2).unwrap();
         let player_text = query_selector(TEXT_PLAYER_SELECTOR).unwrap();
         let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
+        let ai_image_2 = query_selector(IMAGE_AI_SELECTOR_2).unwrap();
         let ai_text = query_selector(TEXT_AI_SELECTOR).unwrap();
 
         // update the images
         player_image.set_inner_text(get_choice_image(&player_choice).as_str());
         ai_image.set_inner_text(get_choice_image(&ai_choice).as_str());
+
+        update_image(&player_image_2, &player_choice);
+        update_image(&ai_image_2, &ai_choice);
 
         // update the text
         player_text.set_inner_text(get_choice(&player_choice).as_str());
@@ -396,4 +406,28 @@ fn show_elements(selector: &str) {
             .remove_attribute("hidden")
             .expect(format!("Unable to remove hidden attribute from {}", selector).as_str());
     }
+}
+
+/// Update an image based on user/ai choice
+fn update_image(img: &HtmlElement, selection: &Choice) {
+    let img_src: &str;
+    let img_alt: &str;
+
+    match selection {
+        Choice::Rock => {
+            img_src = "rock-500.png";
+            img_alt =  "A hand doing a rock sign"; 
+        },
+        Choice::Paper => {
+            img_src = "paper-500.png";
+            img_alt =  "A hand doing a paper sign"; 
+        },
+        Choice::Scissors => {
+            img_src = "scissors-500.png";
+            img_alt =  "A hand doing a scissors sign"; 
+        },
+    };
+
+    img.set_attribute("src", img_src).expect("unable to set img src");
+    img.set_attribute("alt", img_alt).expect("unable to set img alt");
 }

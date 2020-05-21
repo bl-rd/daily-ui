@@ -5,20 +5,27 @@
     <title>My Rust + Webpack project!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"> 
+    <!-- TODO: choose one! -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Beth+Ellen&family=Rock+Salt&display=swap">
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
     <main>
-      <div class="game">
-        <div class="game__element game__element--player">
-          <div class="game__element__image"></div>
-          <h2 class="game__element__text" hidden></h2>
-        </div>
-        <div class="game__element game__element--ai">
-          <div class="game__element__image"></div>
-          <h2 class="game__element__text" hidden></h2>
-        </div>
+      <div class="score score--player">
+        10
+      </div>
+      <div class="score score--ai">
+        20
+      </div>
+      <div class="game__element game__element--player">
+        <img src="rock-500.png" alt="A hand doing a rock sign" />
+        <div class="game__element__image"></div>
+        <h2 class="game__element__text" hidden></h2>
+      </div>
+      <div class="game__element game__element--ai">
+        <img src="rock-500.png" alt="A hand doing a rock sign" />
+        <div class="game__element__image"></div>
+        <h2 class="game__element__text" hidden></h2>
       </div>
       <div class="ui">
         <div class="ui__result" hidden>
