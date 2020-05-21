@@ -49,20 +49,13 @@ const UI_OUTCOME_SELECTOR: &str = ".ui__outcome";
 const UI_PLAY_SELECTOR: &str = ".ui__play";
 const UI_MENU_SELECTOR: &str = ".ui__menu";
 
-const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player .game__element__image";
-const IMAGE_PLAYER_SELECTOR_2: &str = ".game__element--player img";
-const IMAGE_AI_SELECTOR: &str = ".game__element--ai .game__element__image";
-const IMAGE_AI_SELECTOR_2: &str = ".game__element--ai img";
+const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player img";
+const IMAGE_AI_SELECTOR: &str = ".game__element--ai img";
 const IMAGE_SELECTOR: &str = ".game__element__image";
 const TEXT_PLAYER_SELECTOR: &str = ".game__element--player .game__element__text";
 const TEXT_AI_SELECTOR: &str = ".game__element--ai .game__element__text";
 const TEXT_SELECTOR: &str = ".game__element__text";
 const RESULT_SELECTOR: &str = ".ui__result";
-
-// choice variables
-const CHOICE_ROCK: &str = "✊";
-const CHOICE_PAPER: &str = "🤚";
-const CHOICE_SCISSORS: &str = "✌";
 
 // result variables
 const RESULT_WIN: &str = "👍";
@@ -86,8 +79,8 @@ pub fn main_js() -> Result<(), JsValue> {
     let paper_button = query_selector(BUTTON_PAPER_SELECTOR).unwrap();
     let scissors_button = query_selector(BUTTON_SCISSORS_SELECTOR).unwrap();
     let again_button = query_selector(BUTTON_ACTION_SELECTOR).unwrap();
-    let player_image = query_selector(IMAGE_PLAYER_SELECTOR_2).unwrap();
-    let ai_image = query_selector(IMAGE_AI_SELECTOR_2).unwrap();
+    let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
+    let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
 
     // all the button callbacks
     let rock_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
@@ -135,15 +128,6 @@ fn get_choice(choice: &Choice) -> String {
         Choice::Rock => String::from("Rock"),
         Choice::Paper => String::from("Paper"),
         Choice::Scissors => String::from("Scissors")
-    }
-}
-
-/// Get the image based on the choice
-fn get_choice_image(choice: &Choice) -> String {
-    match choice {
-        Choice::Rock => String::from(CHOICE_ROCK),
-        Choice::Paper => String::from(CHOICE_PAPER),
-        Choice::Scissors => String::from(CHOICE_SCISSORS)
     }
 }
 
@@ -225,18 +209,13 @@ fn play(player_choice: Choice) {
         console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
 
         let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
-        let player_image_2 = query_selector(IMAGE_PLAYER_SELECTOR_2).unwrap();
         let player_text = query_selector(TEXT_PLAYER_SELECTOR).unwrap();
         let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
-        let ai_image_2 = query_selector(IMAGE_AI_SELECTOR_2).unwrap();
         let ai_text = query_selector(TEXT_AI_SELECTOR).unwrap();
 
         // update the images
-        player_image.set_inner_text(get_choice_image(&player_choice).as_str());
-        ai_image.set_inner_text(get_choice_image(&ai_choice).as_str());
-
-        update_image(&player_image_2, &player_choice);
-        update_image(&ai_image_2, &ai_choice);
+        update_image(&player_image, &player_choice);
+        update_image(&ai_image, &ai_choice);
 
         // update the text
         player_text.set_inner_text(get_choice(&player_choice).as_str());
@@ -347,33 +326,13 @@ fn init_outcome_state(outcome: Outcome) {
     
     show_elements(IMAGE_SELECTOR);
 
-    let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
-    let ai_image = query_selector(IMAGE_AI_SELECTOR).unwrap();
-
     let result_text = query_selector(format!("{} h2", RESULT_SELECTOR).as_str()).unwrap();
     result_text.set_inner_text(get_outcome(&outcome).as_str());
 
     // closure for the set_timeout.
     let closure = Closure::wrap(Box::new(move || {
-
         show_elements(UI_OUTCOME_SELECTOR);
         show_elements(RESULT_SELECTOR);
-
-        match outcome {
-            Outcome::Draw => {
-                player_image.set_inner_text(RESULT_DRAW);
-                ai_image.set_inner_text(RESULT_DRAW);
-            },
-            Outcome::Lose => {
-                player_image.set_inner_text(RESULT_LOSE);
-                ai_image.set_inner_text(RESULT_WIN);
-            },
-            Outcome::Win => {
-                player_image.set_inner_text(RESULT_WIN);
-                ai_image.set_inner_text(RESULT_LOSE);
-            }
-        };
-
     }) as Box<dyn FnMut()>);
 
     let window = web_sys::window().expect("Should have a window...");
