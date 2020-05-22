@@ -49,16 +49,19 @@ const UI_OUTCOME_SELECTOR: &str = ".ui__outcome";
 const UI_PLAY_SELECTOR: &str = ".ui__play";
 const UI_MENU_SELECTOR: &str = ".ui__menu";
 
+const IMAGE_SELECTOR: &str = ".game__element img";
 const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player img";
 const IMAGE_AI_SELECTOR: &str = ".game__element--ai img";
-const IMAGE_SELECTOR: &str = ".game__element__image";
 const TEXT_PLAYER_SELECTOR: &str = ".game__element--player .game__element__text";
 const TEXT_AI_SELECTOR: &str = ".game__element--ai .game__element__text";
 const TEXT_SELECTOR: &str = ".game__element__text";
 const RESULT_SELECTOR: &str = ".ui__result";
 
+// animation classes
+const ANIM_ROCK_IT: &str = "rock-it";
+
 // other options
-const STATE_TRANSITION_TIME: i32 = 2000;
+const STATE_TRANSITION_TIME: i32 = 1750;
 
 // This is like the `main` function, except for JavaScript.
 #[wasm_bindgen(start)]
@@ -91,13 +94,11 @@ pub fn main_js() -> Result<(), JsValue> {
     }) as Box<dyn FnMut(_)>);
 
     let again_button_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
-        // hide_elements(TEXT_SELECTOR);
         reset_text(TEXT_SELECTOR);
-        hide_elements(IMAGE_SELECTOR);
         hide_elements(UI_OUTCOME_SELECTOR);
         hide_elements(RESULT_SELECTOR);
-        update_image(&player_image, &Choice::Rock);
-        update_image(&ai_image, &Choice::Rock);
+        update_image(&player_image, &Choice::Rock, false);
+        update_image(&ai_image, &Choice::Rock, true);
         change_state(State::Play);
     }) as Box<dyn FnMut(_)>);
 
@@ -198,11 +199,14 @@ fn update_button_disabled_state(state: ButtonState) {
 fn play(player_choice: Choice) {
     update_button_disabled_state(ButtonState::Disabled);
 
+    // rock it
+    make_it_rock(IMAGE_SELECTOR, false);
+
     let window = web_sys::window().expect("Should have a window...");
     let closure = Closure::wrap(Box::new(move || {
-        console_log(format!("You chose {}", get_choice(&player_choice)).as_str());
         let ai_choice = get_random_choice().unwrap();
-        console_log(format!("Opponent chose {}", get_choice(&ai_choice)).as_str());
+
+        make_it_rock(IMAGE_SELECTOR, true);
 
         let player_image = query_selector(IMAGE_PLAYER_SELECTOR).unwrap();
         let player_text = query_selector(TEXT_PLAYER_SELECTOR).unwrap();
@@ -210,8 +214,8 @@ fn play(player_choice: Choice) {
         let ai_text = query_selector(TEXT_AI_SELECTOR).unwrap();
 
         // update the images
-        update_image(&player_image, &player_choice);
-        update_image(&ai_image, &ai_choice);
+        update_image(&player_image, &player_choice, false);
+        update_image(&ai_image, &ai_choice, true);
 
         // update the text
         player_text.set_inner_text(get_choice(&player_choice).as_str());
@@ -319,8 +323,6 @@ fn init_play_state() {
 fn init_outcome_state(outcome: Outcome) {
 
     hide_elements(UI_PLAY_SELECTOR);
-    
-    show_elements(IMAGE_SELECTOR);
 
     let result_text = query_selector(format!("{} h2", RESULT_SELECTOR).as_str()).unwrap();
     result_text.set_inner_text(get_outcome(&outcome).as_str());
@@ -364,23 +366,23 @@ fn show_elements(selector: &str) {
 }
 
 /// Update an image based on user/ai choice
-fn update_image(img: &HtmlElement, selection: &Choice) {
+fn update_image(img: &HtmlElement, selection: &Choice, alt: bool) {
     let img_src: &str;
     let img_alt: &str;
 
     match selection {
         Choice::Rock => {
-            img_src = "rock-500.png";
+            img_src = if alt { "rock-500-alt.png" } else { "rock-500.png" };
             img_alt =  "A hand doing a rock sign"; 
         },
         Choice::Paper => {
-            img_src = "paper-500.png";
+            img_src = if alt { "paper-500-alt.png" } else { "paper-500.png" };
             img_alt =  "A hand doing a paper sign"; 
         },
         Choice::Scissors => {
-            img_src = "scissors-500.png";
+            img_src = if alt { "scissors-500-alt.png" } else { "scissors-500.png" };
             img_alt =  "A hand doing a scissors sign"; 
-        },
+        }
     };
 
     img.set_attribute("src", img_src).expect("unable to set img src");
@@ -393,5 +395,18 @@ fn reset_text(selector: &str) {
 
     for elem in elements.iter() {
         elem.set_inner_html("&nbsp;");
+    }
+}
+
+/// add the rock classes!
+fn make_it_rock(selector: &str, remove: bool) {
+    let elements = query_selector_all(selector).unwrap();
+
+    for elem in elements.iter() {
+        if remove {
+            elem.set_class_name("");
+        } else {
+            elem.set_class_name(ANIM_ROCK_IT);
+        }
     }
 }
