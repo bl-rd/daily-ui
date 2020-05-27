@@ -49,6 +49,9 @@ const UI_OUTCOME_SELECTOR: &str = ".ui__outcome";
 const UI_PLAY_SELECTOR: &str = ".ui__play";
 const UI_MENU_SELECTOR: &str = ".ui__menu";
 
+const SCORE_PLAYER: &str = ".score--player";
+const SCORE_AI: &str = ".score--ai";
+
 const IMAGE_SELECTOR: &str = ".game__element img";
 const IMAGE_PLAYER_SELECTOR: &str = ".game__element--player img";
 const IMAGE_AI_SELECTOR: &str = ".game__element--ai img";
@@ -232,8 +235,6 @@ fn play(player_choice: Choice) {
     window.set_timeout_with_callback_and_timeout_and_arguments_0(closure.as_ref().unchecked_ref(), STATE_TRANSITION_TIME)
         .expect("Unable to do timeout");
     closure.forget();
-
-    console_log("Waiting 3 seconds for transition...");
 }
 
 /// Get a random u64 up to, but not including, the max
@@ -329,6 +330,11 @@ fn init_outcome_state(outcome: Outcome) {
 
     // closure for the set_timeout.
     let closure = Closure::wrap(Box::new(move || {
+        match &outcome {
+            Outcome::Draw => console_log(get_outcome(&outcome).as_str()),
+            Outcome::Win => increase_score(SCORE_PLAYER),
+            Outcome::Lose => increase_score(SCORE_AI)
+        };
         show_elements(UI_OUTCOME_SELECTOR);
         show_elements(RESULT_SELECTOR);
     }) as Box<dyn FnMut()>);
@@ -409,4 +415,14 @@ fn make_it_rock(selector: &str, remove: bool) {
             elem.set_class_name(ANIM_ROCK_IT);
         }
     }
+}
+
+fn increase_score(selector: &str) {
+    let element = query_selector(selector).unwrap();
+
+    let curr_str = element.get_attribute("data-score").unwrap();
+    let curr = curr_str.parse::<u32>().unwrap();
+    let score = curr + 1;
+    element.set_attribute("data-score", score.to_string().as_str())
+        .expect("Cannot set the score for the element");
 }
