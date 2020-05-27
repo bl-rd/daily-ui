@@ -62,6 +62,8 @@ const RESULT_SELECTOR: &str = ".ui__result";
 
 // animation classes
 const ANIM_ROCK_IT: &str = "rock-it";
+const ANIM_WIN: &str = "win";
+const ANIM_LOSE: &str = "lose";
 
 // other options
 const STATE_TRANSITION_TIME: i32 = 1750;
@@ -98,6 +100,8 @@ pub fn main_js() -> Result<(), JsValue> {
 
     let again_button_closure = Closure::wrap(Box::new(move |_event: web_sys::MouseEvent| {
         reset_text(TEXT_SELECTOR);
+        modify_win_class(IMAGE_PLAYER_SELECTOR, Outcome::Draw);
+        modify_win_class(IMAGE_AI_SELECTOR, Outcome::Draw);
         hide_elements(UI_OUTCOME_SELECTOR);
         hide_elements(RESULT_SELECTOR);
         update_image(&player_image, &Choice::Rock, false);
@@ -332,8 +336,16 @@ fn init_outcome_state(outcome: Outcome) {
     let closure = Closure::wrap(Box::new(move || {
         match &outcome {
             Outcome::Draw => console_log(get_outcome(&outcome).as_str()),
-            Outcome::Win => increase_score(SCORE_PLAYER),
-            Outcome::Lose => increase_score(SCORE_AI)
+            Outcome::Win => {
+                modify_win_class(IMAGE_PLAYER_SELECTOR, Outcome::Win);
+                modify_win_class(IMAGE_AI_SELECTOR, Outcome::Lose);
+                increase_score(SCORE_PLAYER);
+            },
+            Outcome::Lose => {
+                modify_win_class(IMAGE_PLAYER_SELECTOR, Outcome::Lose);
+                modify_win_class(IMAGE_AI_SELECTOR, Outcome::Win);
+                increase_score(SCORE_AI);
+            }
         };
         show_elements(UI_OUTCOME_SELECTOR);
         show_elements(RESULT_SELECTOR);
@@ -425,4 +437,14 @@ fn increase_score(selector: &str) {
     let score = curr + 1;
     element.set_attribute("data-score", score.to_string().as_str())
         .expect("Cannot set the score for the element");
+}
+
+fn modify_win_class(selector: &str, outcome: Outcome) {
+    let element = query_selector(selector).unwrap();
+
+    match outcome {
+        Outcome::Win => element.set_class_name(ANIM_WIN),
+        Outcome::Lose => element.set_class_name(ANIM_LOSE),
+        Outcome::Draw => element.set_class_name("")
+    };
 }
