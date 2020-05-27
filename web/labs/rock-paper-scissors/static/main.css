@@ -1,7 +1,12 @@
+:root {
+  --highlight-color: hotpink;
+  --disabled-color: dededf;
+}
+
 * {
-  
-  font-family: 'Beth Ellen', cursive;
-  /* font-family: 'Rock Salt', cursive; */
+  font-family: 'Beth Ellen', monospace;
+  font-size: 1.1rem;
+  font-size: clamp(1rem, calc(1rem + 1.2vmax), 2vmax);
   overflow: hidden;
 }
 
@@ -26,7 +31,7 @@ main {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 2fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
 }
 
 button {
@@ -37,8 +42,9 @@ button {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin: 1rem;
+  margin: 0.6rem 1rem;
   min-width: 15ch;
+  min-width: clamp(10ch, 5vmax, 15ch);
 }
 
 img {
@@ -47,11 +53,11 @@ img {
 }
 
 button:active {
-  background-color: hotpink;
+  background-color: var(--highlight-color);
 }
 
 button[disabled] {
-  background-color: #dededf;
+  background-color: var(--disabled-color);
 }
 
 .game {
@@ -99,12 +105,13 @@ button[disabled] {
   transform: translateX(-50%) translateY(-50%);
   border: solid 0.25ch black;
   background-color: white;
-  filter: drop-shadow(1ch 1ch 0 black);
+  filter: drop-shadow(1ch 1ch 0 var(--highlight-color));
 }
 
 .ui__result h2 {
   margin: 1rem 2rem;
   text-align: center;
+  font-weight: normal;
 }
 
 .rock-it {
