@@ -8,12 +8,12 @@
   "scripts": {
     "build": "./target/release/pens build",
     "go": "./target/release/pens",
-    "serve": "npm run build && hs -o"
+    "serve": "npm run build && light-server -s . -o"
   },
   "keywords": [],
   "author": "Bill Reid <me@bl-rd.dev> (https://bl-rd.dev)",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.12.3"
+    "light-server": "^2.6.4"
   }
 }

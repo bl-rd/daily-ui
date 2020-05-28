@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Rust + Webpack project!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap">
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <main>
+      <div class="score score--player" data-score="0">
+        You: &nbsp;
+      </div>
+      <div class="score score--ai" data-score="0">
+        Computer: &nbsp;
+      </div>
+      <div class="game__element game__element--player">
+        <img src="rock-500.png" alt="A hand doing a rock sign" />
+        <h2 class="game__element__text" >&nbsp;</h2>
+      </div>
+      <div class="game__element game__element--ai">
+        <img src="rock-500-alt.png" alt="A hand doing a rock sign" />
+        <h2 class="game__element__text">&nbsp;</h2>
+      </div>
+      <div class="ui">
+        <div class="ui__result" hidden>
+          <h2>You win?</h2>
+        </div>
+        <div class="ui__menu" hidden>
+          <button id="play">Play</button>
+        </div>
+        <div class="ui__play" hidden>
+          <button id="rock">Rock</button>
+          <button id="paper">Paper</button>
+          <button id="scissors">Scissors</button>
+        </div>
+        <div class="ui__outcome" hidden>
+          <button id="again">Play again?</button>
+        </div>
+      </div>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>

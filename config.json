@@ -5,7 +5,7 @@
     "pens": [
       {
         "path": "labs/rock-paper-scissors",
-        "text": "Rock, paper, scissors",
+        "text": "Rock, paper, scissors 🦀",
         "flavour": "rust",
         "timestamp": 1589229596
       }
