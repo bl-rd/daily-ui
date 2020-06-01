@@ -42,6 +42,7 @@ a {
 
 li {
   list-style: none;
+  margin-bottom: 1.25rem;
 }
 
 @media (prefers-color-scheme: dark) {
