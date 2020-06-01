@@ -390,15 +390,15 @@ fn update_image(img: &HtmlElement, selection: &Choice, alt: bool) {
 
     match selection {
         Choice::Rock => {
-            img_src = if alt { "rock-500-alt.png" } else { "rock-500.png" };
+            img_src = if alt { "assets/rock-500-alt.png" } else { "assets/rock-500.png" };
             img_alt =  "A hand doing a rock sign"; 
         },
         Choice::Paper => {
-            img_src = if alt { "paper-500-alt.png" } else { "paper-500.png" };
+            img_src = if alt { "assets/paper-500-alt.png" } else { "assets/paper-500.png" };
             img_alt =  "A hand doing a paper sign"; 
         },
         Choice::Scissors => {
-            img_src = if alt { "scissors-500-alt.png" } else { "scissors-500.png" };
+            img_src = if alt { "assets/scissors-500-alt.png" } else { "assets/scissors-500.png" };
             img_alt =  "A hand doing a scissors sign"; 
         }
     };

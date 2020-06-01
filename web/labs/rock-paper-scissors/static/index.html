@@ -11,10 +11,12 @@
     <meta name="twitter:image" content="https://bl-rd.github.io/stuff-made-by-me/web/labs/rock-paper-scissors/scissors-thumbnail.png">
     <meta name="twitter:image:alt" content="A drawing of a hand making the scissors hand">
 
+    <link rel='manifest' href='manifest.json'>
+
     <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap">
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="assets/main.css" />
   </head>
   <body>
     <main>
@@ -25,11 +27,11 @@
         Computer: &nbsp;
       </div>
       <div class="game__element game__element--player">
-        <img src="rock-500.png" alt="A hand doing a rock sign" />
+        <img src="assets/rock-500.png" alt="A hand doing a rock sign" />
         <h2 class="game__element__text" >&nbsp;</h2>
       </div>
       <div class="game__element game__element--ai">
-        <img src="rock-500-alt.png" alt="A hand doing a rock sign" />
+        <img src="assets/rock-500-alt.png" alt="A hand doing a rock sign" />
         <h2 class="game__element__text">&nbsp;</h2>
       </div>
       <div class="ui">
@@ -49,6 +51,16 @@
         </div>
       </div>
     </main>
+    <script>
+      (function () {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('service-worker.js')
+            .then(registration => {
+              console.log('registered service worker');
+            })
+        }
+      })();
+    </script>
     <script src="index.js"></script>
   </body>
 </html>

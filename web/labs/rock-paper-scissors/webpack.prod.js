@@ -1,6 +1,7 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const { GenerateSW } = require('workbox-webpack-plugin');
 
 const dist = path.resolve(__dirname);
 
@@ -24,5 +25,7 @@ module.exports = {
     new WasmPackPlugin({
       crateDirectory: __dirname,
     }),
+
+    new GenerateSW()
   ]
 };
