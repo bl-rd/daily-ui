@@ -76,5 +76,17 @@
         "timestamp": 1589010918
       }
     ]
+  },
+  {
+    "name": "daily-ui",
+    "text": "Daily UI",
+    "pens": [
+      {
+        "path": "daily-ui/001-sign-up",
+        "text": "Sign-up",
+        "flavour": "js",
+        "timestamp": 1591208999
+      }
+    ]
   }
 ]

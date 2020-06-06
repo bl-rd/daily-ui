@@ -1,0 +1,176 @@
+:root {
+  --orange: #EDAF53;
+  --orange-light: #EDD15F;
+  --blue: #7DFAEC;
+  --blue-light: #70E0D3;
+  --pink: #FA4BED;
+  --pink-light: #FA71EE;
+}
+
+* {
+  font-size: 1rem;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to top left, var(--orange-light) 25%, var(--orange) 100%);
+}
+
+body > div:first-of-type {
+  display: grid;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  max-height: 90%;
+  grid-row: 2/3;
+}
+
+*[hidden] {
+  display: none;
+}
+
+form {
+  padding: 1rem;
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field {
+  background-color: black;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.form-field > * {
+  color: white;
+}
+
+.form-field label {
+  font-weight: bold;
+}
+
+.form-field input {
+  background-color: black;
+  border: none;
+  border-bottom: 1px solid white;
+  width: 100%;
+  margin-top: .5rem;
+  padding-bottom: 0.6rem;
+}
+
+button {
+  margin: 1rem 0;
+  min-width: 50%;
+  background: linear-gradient(to bottom right, var(--pink-light) 25%, var(--pink) 100%);
+  border: 1px solid var(--pink);
+}
+
+button:active, button:focus {
+  outline: none;
+}
+
+button span {
+  display: block;
+  margin: 1rem;
+  text-transform: uppercase;
+  color: black;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+.welcome {
+  animation: appear 0.2s 1 ease-out forwards normal;
+  background: linear-gradient(to top left, var(--pink) 25%, var(--blue) 100%);
+  padding: 0.3rem;
+  position: relative;
+}
+
+.welcome * {
+  color: white;
+}
+
+.welcome > div {
+  background-color: black;
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome h2 {
+  font-size: 1.8rem;
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-underline-offset: 0.7rem;
+  text-decoration-thickness: 0.3rem;
+}
+
+.welcome p {
+  margin-top: 2rem;
+}
+
+.shake {
+  animation: shake 0.1s infinite linear forwards normal;
+}
+
+.rock {
+  transform-origin: bottom;
+  animation: rock 1.75s infinite linear forwards normal;
+}
+
+.complete {
+  position: relative;
+  animation: complete 1s 1 ease-in forwards normal;
+}
+
+@keyframes shake {
+  50% {
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes rock {
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes complete {
+  20% {
+    margin-top: 1rem;
+  }
+  100% {
+    margin-top: -50rem;
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
