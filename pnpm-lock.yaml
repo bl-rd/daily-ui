@@ -1,5 +1,5 @@
 devDependencies:
-  light-server: 2.6.4
+  light-server: 2.7.0
 lockfileVersion: 5.1
 packages:
   /accepts/1.3.7:
@@ -34,10 +34,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
-  /commander/2.20.3:
+  /commander/5.1.0:
     dev: true
+    engines:
+      node: '>= 6'
     resolution:
-      integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
+      integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
   /concat-map/0.0.1:
     dev: true
     resolution:
@@ -98,6 +100,12 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+  /depd/2.0.0:
+    dev: true
+    engines:
+      node: '>= 0.8'
+    resolution:
+      integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
   /destroy/1.0.4:
     dev: true
     resolution:
@@ -164,7 +172,7 @@ packages:
       integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
   /gaze/1.1.3:
     dependencies:
-      globule: 1.3.1
+      globule: 1.3.2
     dev: true
     engines:
       node: '>= 4.0.0'
@@ -181,7 +189,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
-  /globule/1.3.1:
+  /globule/1.3.2:
     dependencies:
       glob: 7.1.6
       lodash: 4.17.15
@@ -190,7 +198,7 @@ packages:
     engines:
       node: '>= 0.10'
     resolution:
-      integrity: sha512-OVyWOHgw29yosRHCHo7NncwR1hW5ew0W/UrvtwvjefVJeQ26q4/8r8FmPsSF1hJ93IgWkyv16pCTz6WblMzm/g==
+      integrity: sha512-7IDTQTIu2xzXkT+6mlluidnWo+BypnbSoEVVQCGfzqnl5Ik8d3e1d4wycb8Rj9tWW+Z39uPWsdlquqiqPCd/pA==
   /handle-thing/2.0.1:
     dev: true
     resolution:
@@ -260,15 +268,15 @@ packages:
     dev: true
     resolution:
       integrity: sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
-  /light-server/2.6.4:
+  /light-server/2.7.0:
     dependencies:
-      commander: 2.20.3
+      commander: 5.1.0
       connect: 3.7.0
       connect-history-api-fallback: 1.6.0
       connect-injector: 0.4.4
       gaze: 1.1.3
       http-proxy: 1.18.1
-      morgan: 1.9.1
+      morgan: 1.10.0
       opener: 1.5.1
       parseurl: 1.3.3
       serve-index: 1.9.1
@@ -279,7 +287,7 @@ packages:
     dev: true
     hasBin: true
     resolution:
-      integrity: sha512-rrJn+RrM98chJM1+Ebwk0wqc+ygtUhU5DYQvWlxkAEnnvYh8a//k9YGwVUnHDHI23QQnEMCodava99GzmX5wjw==
+      integrity: sha512-WTJF6O7vViOzdGjg0jiyennashGdaIoqCA/AQqlNj7sM5QEqupWeFH7uTYcswr37iVF5HT5SIZbfCBxoU5XVhA==
   /lodash/4.17.15:
     dev: true
     resolution:
@@ -315,18 +323,18 @@ packages:
     dev: true
     resolution:
       integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
-  /morgan/1.9.1:
+  /morgan/1.10.0:
     dependencies:
       basic-auth: 2.0.1
       debug: 2.6.9
-      depd: 1.1.2
+      depd: 2.0.0
       on-finished: 2.3.0
       on-headers: 1.0.2
     dev: true
     engines:
       node: '>= 0.8.0'
     resolution:
-      integrity: sha512-HQStPIV4y3afTiCYVxirakhlCfGkI161c76kKFca7Fk1JusM//Qeo1ej2XaMniiNeaZklMVrh3vTtIzpzwbpmA==
+      integrity: sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==
   /ms/2.0.0:
     dev: true
     resolution:
@@ -598,4 +606,4 @@ packages:
     resolution:
       integrity: sha512-iFtXzngZVXPGgpTlP1rBqsUK82p9tKqsWRPg5L56egiljujJT3vGAYnHANvFxBieXrTFavhzhxW52jnaWV+w2w==
 specifiers:
-  light-server: ^2.6.4
+  light-server: ^2.7.0

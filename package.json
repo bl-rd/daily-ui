@@ -14,6 +14,6 @@
   "author": "Bill Reid <me@bl-rd.dev> (https://bl-rd.dev)",
   "license": "ISC",
   "devDependencies": {
-    "light-server": "^2.6.4"
+    "light-server": "^2.7.0"
   }
 }
