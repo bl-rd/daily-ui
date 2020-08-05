@@ -4,8 +4,8 @@
     "text": "labs",
     "pens": [
       {
-        "path": "labs/rock-paper-scissors",
-        "text": "Rock, paper, scissors 🦀",
+        "path": "https://bl-rd.github.io/rock-paper-rusty-scissors/",
+        "text": "Rock, paper, rusty scissors",
         "flavour": "rust",
         "timestamp": 1589229596
       },
