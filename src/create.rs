@@ -57,6 +57,7 @@ pub fn run() {
 
     match template_flavour.as_str() {
         "rust" => build_wasm_template(template_collection, template_directory),
+        "external" => println!("going to build external config file..."),
         _ => build_js_template(template_collection, template_directory).unwrap()
     };
 

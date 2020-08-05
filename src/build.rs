@@ -80,7 +80,13 @@ fn get_html_template(path: String) -> String {
 // This might be more reusable if it takes separate href and text arguments
 fn build_pen_list_markup(html: &String, href: &String, text: &String) -> String {
   let parts = href.split("/");
-  let link = format!("{}/", parts.collect::<Vec<_>>().pop().unwrap());
+
+  // absolute links should be treated as such
+  let link = match href.starts_with("http") {
+    true => href.clone(),
+    false => format!("{}/", parts.collect::<Vec<_>>().pop().unwrap())
+  };
+  
   let mut markup = html.replace(HREF_PLACEHOLDER, link.as_str());
   markup = markup.replace(LINK_TEXT_PLACEHOLDER, text.as_str());
   markup

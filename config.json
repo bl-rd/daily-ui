@@ -8,6 +8,18 @@
         "text": "Rock, paper, scissors 🦀",
         "flavour": "rust",
         "timestamp": 1589229596
+      },
+      {
+        "path": "https://bl-rd.github.io/white-noise-app/",
+        "text": "White noise app",
+        "flavour": "external",
+        "timestamp": 1535068800
+      },
+      {
+        "path": "https://bl-rd.github.io/angular-haiku/",
+        "text": "Angular Haiku",
+        "flavour": "external",
+        "timestamp": 1502755200
       }
     ]
   },
