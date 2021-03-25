@@ -86,6 +86,12 @@
         "text": "Size and shape",
         "flavour": "js",
         "timestamp": 1589010918
+      },
+      {
+        "path": "codepen/monochrome-heart",
+        "text": "Monochrome heart",
+        "flavour": "js",
+        "timestamp": 1616666528
       }
     ]
   },
